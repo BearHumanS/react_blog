@@ -1,9 +1,9 @@
 import { Route, Routes, Navigate } from 'react-router-dom';
 import Home from '@/pages/home';
 import PostList from '@/pages/posts';
-import Detail from '@/pages/posts/Detail';
-import NewPost from '@/pages/posts/NewPost';
-import EditPost from '@/pages/posts/EditPost';
+import PostDetailPage from '@/pages/posts/detail';
+import NewPostPage from '@/pages/posts/newPost';
+import EditPostPage from '@/pages/posts/editPost';
 import ProfilePage from '@/pages/profile';
 import LoginPage from '@/pages/login';
 import SignUpPage from '@/pages/signup';
@@ -13,9 +13,9 @@ const Router = () => {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/posts" element={<PostList />} />
-      <Route path="/posts/:id" element={<Detail />} />
-      <Route path="/posts/new" element={<NewPost />} />
-      <Route path="/posts/edit/:id" element={<EditPost />} />
+      <Route path="/posts/:id" element={<PostDetailPage />} />
+      <Route path="/posts/new" element={<NewPostPage />} />
+      <Route path="/posts/edit/:id" element={<EditPostPage />} />
       <Route path="/profile" element={<ProfilePage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/signup" element={<SignUpPage />} />

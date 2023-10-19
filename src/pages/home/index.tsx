@@ -4,13 +4,6 @@ import styled from 'styled-components';
 const Home = () => {
   return (
     <>
-      <Header>
-        <Navbar>
-          <Link to="/posts/new">글쓰기</Link>
-          <Link to="/posts">게시글</Link>
-          <Link to="/profile">프로필</Link>
-        </Navbar>
-      </Header>
       <PostNavigation>
         <PostAll>전체</PostAll>
         <PostMy>나의 글</PostMy>
@@ -34,39 +27,9 @@ const Home = () => {
           </PostBox>
         ))}
       </PostList>
-      <Footer>
-        <Link to="/posts/new">글쓰기</Link>
-        <Link to="/posts">게시글</Link>
-        <Link to="/profile">프로필</Link>
-      </Footer>
     </>
   );
 };
-
-const Header = styled.header`
-  display: flex;
-  justify-content: space-between;
-  flex-direction: row-reverse;
-  border-bottom: 1px solid #f2f2f2;
-  padding: 10px 40px;
-  min-height: 40px;
-  align-items: center;
-`;
-
-const Navbar = styled.div`
-  display: flex;
-  flex-direction: row;
-
-  & > a {
-    margin: 0px 10px;
-    color: gray;
-
-    &:hover,
-    &:focus {
-      color: black;
-    }
-  }
-`;
 
 const PostNavigation = styled.div`
   display: flex;
@@ -152,28 +115,6 @@ const PostEdit = styled.div`
   &:hover,
   &:focus {
     color: black;
-  }
-`;
-
-const Footer = styled.footer`
-  background-color: #f2f2f2;
-  min-height: 40px;
-  padding: 20px 40px;
-  font-size: 14px;
-  text-align: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 20px;
-
-  & > a {
-    margin: 0px 10px;
-    color: gray;
-
-    &:hover,
-    &:focus {
-      color: black;
-    }
   }
 `;
 
