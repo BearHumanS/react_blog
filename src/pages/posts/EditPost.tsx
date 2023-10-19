@@ -1,5 +1,5 @@
-const EditPost = () => {
+const EditPostPage = () => {
   return <div>EditPost</div>;
 };
 
-export default EditPost;
+export default EditPostPage;
