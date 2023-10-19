@@ -1,5 +1,9 @@
 const NewPostPage = () => {
-  return <div>NewPost</div>;
+  return (
+    <>
+      <div>Post Form</div>
+    </>
+  );
 };
 
 export default NewPostPage;
