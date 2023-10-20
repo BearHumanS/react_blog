@@ -1,23 +1,27 @@
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-const PostForm = () => {
+const LoginForm = () => {
   return (
     <>
       <StyledForm action="/post" method="POST">
+        <StyledLogin>로그인</StyledLogin>
         <FormBlock>
-          <StyledLabel htmlFor="title">제목</StyledLabel>
-          <StyledInput type="text" name="title" id="title" required />
+          <StyledLabel htmlFor="email">이메일</StyledLabel>
+          <StyledInput type="email" name="email" id="email" required />
         </FormBlock>
         <FormBlock>
-          <StyledLabel htmlFor="summary">요약</StyledLabel>
-          <StyledInput type="text" name="summary" id="summary" required />
+          <StyledLabel htmlFor="password">비밀번호</StyledLabel>
+          <StyledInput type="password" name="password" id="password" required />
         </FormBlock>
         <FormBlock>
-          <StyledLabel htmlFor="content">내용</StyledLabel>
-          <StyledTextarea name="content" id="content" required />
+          <>
+            계정이 없으신가요?{' '}
+            <StyledSignUp to="/signup">회원가입</StyledSignUp>
+          </>
         </FormBlock>
         <FormBlock>
-          <SubmitBtn type="submit" value="제출" />
+          <SubmitBtn type="submit" value="로그인" />
         </FormBlock>
       </StyledForm>
     </>
@@ -29,11 +33,27 @@ const StyledForm = styled.form`
   max-width: 680px;
   padding: 20px;
   margin-top: 20px;
+  min-height: 70vh;
+  margin-top: 10vh;
+
+  & > div {
+    &:nth-last-child(2) {
+      display: flex;
+    }
+  }
+`;
+
+const StyledLogin = styled.h1`
+  font-size: 36px;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 4px;
 `;
 
 const FormBlock = styled.div`
   margin-top: 20px;
   width: 100%;
+  white-space: pre-wrap;
 `;
 
 const StyledLabel = styled.label`
@@ -52,15 +72,14 @@ const StyledInput = styled.input`
   max-width: 680px;
 `;
 
-const StyledTextarea = styled.textarea`
-  min-height: 400px;
-  padding: 10px 10px;
-  font-size: 16px;
-  border-radius: 0.3rem;
-  border: 1px solid lightgray;
-  width: 100%;
-  max-width: 680px;
-  line-height: 1.5;
+const StyledSignUp = styled(Link)`
+  color: gray;
+  text-decoration: underline;
+
+  &:hover {
+    color: #2563eb;
+    font-weight: 500;
+  }
 `;
 
 const SubmitBtn = styled.input`
@@ -80,4 +99,4 @@ const SubmitBtn = styled.input`
   }
 `;
 
-export default PostForm;
+export default LoginForm;
