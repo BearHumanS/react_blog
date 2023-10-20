@@ -1,8 +1,10 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, FormEvent, useState } from 'react';
 
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { EMAIL_REGEX /* PASSWORD_REGEX  */ } from '@/lib/constants';
+import { app } from '@/firebase';
+import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
 
 const SignUpForm = () => {
   const [email, setEmail] = useState('');
@@ -12,6 +14,17 @@ const SignUpForm = () => {
 
   const emailValidRegex = EMAIL_REGEX;
   /*   const passwordValidRegex = PASSWORD_REGEX; */
+
+  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      const auth = getAuth(app);
+      await createUserWithEmailAndPassword(auth, email, password);
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.log(error);
+    }
+  };
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     const {
@@ -55,7 +68,7 @@ const SignUpForm = () => {
 
   return (
     <>
-      <StyledForm action="/post" method="POST">
+      <StyledForm onSubmit={onSubmit}>
         <StyledLogin>회원가입</StyledLogin>
         <FormBlock>
           <StyledLabel htmlFor="email">이메일</StyledLabel>
