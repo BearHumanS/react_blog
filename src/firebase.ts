@@ -1,6 +1,9 @@
 // Import the functions you need from the SDKs you need
-import { initializeApp } from 'firebase/app';
-import { getAnalytics } from 'firebase/analytics';
+import { initializeApp, FirebaseApp, getApp } from 'firebase/app';
+import 'firebase/auth';
+
+export let app: FirebaseApp;
+
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -16,8 +19,13 @@ const firebaseConfig = {
   measurementId: import.meta.env.VITE_MEASUREMENT_ID,
 };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+try {
+  app = getApp('app');
+} catch (error) {
+  app = initializeApp(firebaseConfig, 'app');
+}
 
-export default analytics;
+// Initialize Firebase
+const firebase = initializeApp(firebaseConfig);
+
+export default firebase;

@@ -1,9 +1,16 @@
+import { useState } from 'react';
+import { app } from '@/firebase';
+import { getAuth } from 'firebase/auth';
+
 import Router from '@/components/Router';
 
 function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const auth = getAuth(app);
+
   return (
     <>
-      <Router />
+      <Router isAuthenticated={isAuthenticated} />
     </>
   );
 }
