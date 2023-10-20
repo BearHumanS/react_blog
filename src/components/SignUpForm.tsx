@@ -1,18 +1,81 @@
+import { ChangeEvent, useState } from 'react';
+
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { EMAIL_REGEX /* PASSWORD_REGEX  */ } from '@/lib/constants';
 
 const SignUpForm = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [passwordConfrim, setpasswordConfrim] = useState('');
+  const [error, setError] = useState('');
+
+  const emailValidRegex = EMAIL_REGEX;
+  /*   const passwordValidRegex = PASSWORD_REGEX; */
+
+  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const {
+      target: { name, value },
+    } = e;
+
+    if (name === 'email') {
+      setEmail(value);
+
+      if (!value?.match(emailValidRegex)) {
+        setError('이메일 형식이 올바르지 않습니다.');
+      } else {
+        setError('');
+      }
+    }
+
+    if (name === 'password') {
+      setPassword(value);
+
+      if (value?.length < 8) {
+        setError('비밀번호는 최소 8자리 이상입니다.');
+      } else if (passwordConfrim?.length > 0 && value !== passwordConfrim) {
+        setError('비밀번호와 비밀번호 확인이 일치하지 않습니다.');
+      } else {
+        setError('');
+      }
+    }
+
+    if (name === 'passwordConfirm') {
+      setpasswordConfrim(value);
+
+      if (value?.length < 8) {
+        setError('비밀번호는 최소 8자리 이상입니다.');
+      } else if (value !== password) {
+        setError('비밀번호가 일치하지 않습니다.');
+      } else {
+        setError('');
+      }
+    }
+  };
+
   return (
     <>
       <StyledForm action="/post" method="POST">
         <StyledLogin>회원가입</StyledLogin>
         <FormBlock>
           <StyledLabel htmlFor="email">이메일</StyledLabel>
-          <StyledInput type="email" name="email" id="email" required />
+          <StyledInput
+            type="email"
+            name="email"
+            id="email"
+            required
+            onChange={onChange}
+          />
         </FormBlock>
         <FormBlock>
           <StyledLabel htmlFor="password">비밀번호</StyledLabel>
-          <StyledInput type="password" name="password" id="password" required />
+          <StyledInput
+            type="password"
+            name="password"
+            id="password"
+            required
+            onChange={onChange}
+          />
         </FormBlock>
         <FormBlock>
           <StyledLabel htmlFor="passwordConfirm">비밀번호 확인</StyledLabel>
@@ -21,15 +84,25 @@ const SignUpForm = () => {
             name="passwordConfirm"
             id="passwordConfirm"
             required
+            onChange={onChange}
           />
         </FormBlock>
+        {error && error?.length > 0 && (
+          <FormBlock>
+            <FormError>{error}</FormError>
+          </FormBlock>
+        )}
         <FormBlock>
           <>
             계정이 있으신가요? <StyledSignUp to="/login">로그인</StyledSignUp>
           </>
         </FormBlock>
         <FormBlock>
-          <SubmitBtn type="submit" value="회원가입" />
+          <SubmitBtn
+            type="submit"
+            value="회원가입"
+            disabled={error?.length > 0}
+          />
         </FormBlock>
       </StyledForm>
     </>
@@ -62,6 +135,10 @@ const FormBlock = styled.div`
   margin-top: 20px;
   width: 100%;
   white-space: pre-wrap;
+`;
+
+const FormError = styled.div`
+  color: red;
 `;
 
 const StyledLabel = styled.label`
