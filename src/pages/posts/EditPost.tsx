@@ -1,5 +1,11 @@
+import PostForm from '@/components/PostForm';
+
 const EditPostPage = () => {
-  return <div>EditPost</div>;
+  return (
+    <>
+      <PostForm />
+    </>
+  );
 };
 
 export default EditPostPage;

@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -5,18 +6,38 @@ interface PostListComponentProps {
   Navigation?: boolean;
 }
 
+interface TabProps {
+  $active: boolean;
+}
+
+type tabType = 'all' | 'my';
+
 const PostListComponent = ({ Navigation = true }: PostListComponentProps) => {
+  const [activeTab, setActiveTab] = useState<tabType>('all');
+
   return (
     <>
       {Navigation && (
         <PostNavigation>
-          <PostAll>전체</PostAll>
-          <PostMy>나의 글</PostMy>
+          <Tab
+            role="presentation"
+            $active={activeTab === 'all'}
+            onClick={() => setActiveTab('all')}
+          >
+            전체
+          </Tab>
+          <Tab
+            role="presentation"
+            $active={activeTab === 'my'}
+            onClick={() => setActiveTab('my')}
+          >
+            나의 글
+          </Tab>
         </PostNavigation>
       )}
 
       <PostList>
-        {[...Array(10)].map((e, index) => (
+        {[...Array(10)].map((_, index) => (
           <PostBox key={index}>
             <Link to={`/posts/${index}`}>
               <PostProfileBox>
@@ -49,12 +70,18 @@ const PostNavigation = styled.div`
   padding: 48px 20px 0 20px;
 `;
 
-const PostAll = styled.div`
+const Tab = styled.div<TabProps>`
+  cursor: pointer;
+  padding: 10px;
+  color: ${(props) => (props.$active ? 'black' : 'gray')};
+`;
+
+/* const PostAll = styled.div`
   color: black;
   font-weight: 600;
 `;
 
-const PostMy = styled.div``;
+const PostMy = styled.div``; */
 
 const PostList = styled.div`
   min-height: 90vh;

@@ -21,6 +21,9 @@ const Footer = styled.footer`
   align-items: center;
   justify-content: center;
   gap: 20px;
+  bottom: 0;
+  position: fixed;
+  width: 100%;
 
   & > a {
     margin: 0px 10px;
