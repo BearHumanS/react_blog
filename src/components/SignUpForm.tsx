@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { EMAIL_REGEX /* PASSWORD_REGEX  */ } from '@/lib/constants';
 import { app } from '@/firebase';
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
+import { toast } from 'react-toastify';
 
 const SignUpForm = () => {
   const [email, setEmail] = useState('');
@@ -20,9 +21,13 @@ const SignUpForm = () => {
     try {
       const auth = getAuth(app);
       await createUserWithEmailAndPassword(auth, email, password);
-    } catch (error) {
+
+      toast.success('회원가입에 성공했습니다.');
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
       // eslint-disable-next-line no-console
       console.log(error);
+      toast.error(error?.code);
     }
   };
 
