@@ -1,18 +1,38 @@
-import { Link } from 'react-router-dom';
+import { app } from '@/firebase';
+import { getAuth, signOut } from 'firebase/auth';
+import { toast } from 'react-toastify';
 import styled from 'styled-components';
 
 const Profile = () => {
+  const auth = getAuth(app);
+
+  const onLogout = async () => {
+    try {
+      await signOut(auth);
+      toast.success('로그아웃이 되었습니다.');
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      // eslint-disable-next-line no-console
+      console.log(error);
+      toast.error(error?.code);
+    }
+  };
+
   return (
     <>
       <ProfileBox>
         <ProfileFlex>
           <ProfileImage />
           <ProfileUserInfo>
-            <ProfileEmail>test@test.com</ProfileEmail>
-            <ProfileUserName>유저저</ProfileUserName>
+            <ProfileEmail>{auth?.currentUser?.email}</ProfileEmail>
+            <ProfileUserName>
+              {auth?.currentUser?.displayName || '사용자'}
+            </ProfileUserName>
           </ProfileUserInfo>
         </ProfileFlex>
-        <ProfileLogout to="/">로그아웃</ProfileLogout>
+        <ProfileLogout role="presentation" onClick={onLogout}>
+          로그아웃
+        </ProfileLogout>
       </ProfileBox>
     </>
   );
@@ -55,9 +75,10 @@ const ProfileUserName = styled.div`
   padding: 4px 0;
 `;
 
-const ProfileLogout = styled(Link)`
+const ProfileLogout = styled.div`
   color: gray;
   font-size: 14px;
+  cursor: pointer;
 
   &:hover,
   &:focus {

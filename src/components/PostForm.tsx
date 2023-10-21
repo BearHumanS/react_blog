@@ -29,6 +29,7 @@ const StyledForm = styled.form`
   max-width: 680px;
   padding: 20px;
   margin-top: 20px;
+  margin-bottom: 64px;
 `;
 
 const FormBlock = styled.div`

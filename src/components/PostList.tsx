@@ -90,6 +90,7 @@ const PostList = styled.div`
   line-height: 24px;
   max-width: 680px;
   margin: 0 auto;
+  margin-bottom: 40px;
 `;
 
 const PostBox = styled.div`

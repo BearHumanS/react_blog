@@ -19,7 +19,7 @@ const Header = styled.header`
   justify-content: space-between;
   border-bottom: 1px solid #f2f2f2;
   padding: 10px 40px;
-  min-height: 40px;
+  min-height: 80px;
   align-items: center;
   position: sticky;
   top: 0;

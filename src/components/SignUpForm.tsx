@@ -1,6 +1,6 @@
 import { ChangeEvent, FormEvent, useState } from 'react';
 
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { EMAIL_REGEX /* PASSWORD_REGEX  */ } from '@/lib/constants';
 import { app } from '@/firebase';
@@ -13,6 +13,8 @@ const SignUpForm = () => {
   const [passwordConfrim, setpasswordConfrim] = useState('');
   const [error, setError] = useState('');
 
+  const navigate = useNavigate();
+
   const emailValidRegex = EMAIL_REGEX;
   /*   const passwordValidRegex = PASSWORD_REGEX; */
 
@@ -23,6 +25,7 @@ const SignUpForm = () => {
       await createUserWithEmailAndPassword(auth, email, password);
 
       toast.success('회원가입에 성공했습니다.');
+      navigate('/');
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       // eslint-disable-next-line no-console
@@ -83,6 +86,7 @@ const SignUpForm = () => {
             id="email"
             required
             onChange={onChange}
+            value={email}
           />
         </FormBlock>
         <FormBlock>
@@ -93,6 +97,7 @@ const SignUpForm = () => {
             id="password"
             required
             onChange={onChange}
+            value={password}
           />
         </FormBlock>
         <FormBlock>
@@ -103,6 +108,7 @@ const SignUpForm = () => {
             id="passwordConfirm"
             required
             onChange={onChange}
+            value={passwordConfrim}
           />
         </FormBlock>
         {error && error?.length > 0 && (
