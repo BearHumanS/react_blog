@@ -1,7 +1,7 @@
 import { EMAIL_REGEX } from '@/lib/constants';
 import { ChangeEvent, FormEvent, useState } from 'react';
 
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { app } from '@/firebase';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
@@ -11,6 +11,8 @@ const LoginForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+
+  const navigate = useNavigate();
 
   const emailValidRegex = EMAIL_REGEX;
 
@@ -48,6 +50,7 @@ const LoginForm = () => {
       await signInWithEmailAndPassword(auth, email, password);
 
       toast.success('로그인에 성공했습니다.');
+      navigate('/');
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       // eslint-disable-next-line no-console
