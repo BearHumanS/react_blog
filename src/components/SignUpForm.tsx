@@ -83,6 +83,7 @@ const SignUpForm = () => {
             id="email"
             required
             onChange={onChange}
+            value={email}
           />
         </FormBlock>
         <FormBlock>
@@ -93,6 +94,7 @@ const SignUpForm = () => {
             id="password"
             required
             onChange={onChange}
+            value={password}
           />
         </FormBlock>
         <FormBlock>
@@ -103,6 +105,7 @@ const SignUpForm = () => {
             id="passwordConfirm"
             required
             onChange={onChange}
+            value={passwordConfrim}
           />
         </FormBlock>
         {error && error?.length > 0 && (
