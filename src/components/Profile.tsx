@@ -1,9 +1,12 @@
+import { useContext } from 'react';
+import AuthContext from '@/context/AuthContext';
 import { app } from '@/firebase';
 import { getAuth, signOut } from 'firebase/auth';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
 
 const Profile = () => {
+  const { user } = useContext(AuthContext);
   const auth = getAuth(app);
 
   const onLogout = async () => {
@@ -24,10 +27,8 @@ const Profile = () => {
         <ProfileFlex>
           <ProfileImage />
           <ProfileUserInfo>
-            <ProfileEmail>{auth?.currentUser?.email}</ProfileEmail>
-            <ProfileUserName>
-              {auth?.currentUser?.displayName || '사용자'}
-            </ProfileUserName>
+            <ProfileEmail>{user?.email}</ProfileEmail>
+            <ProfileUserName>{user?.displayName || '사용자'}</ProfileUserName>
           </ProfileUserInfo>
         </ProfileFlex>
         <ProfileLogout role="presentation" onClick={onLogout}>
