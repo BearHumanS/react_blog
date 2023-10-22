@@ -9,3 +9,6 @@ export const EMAIL_REGEX =
 
 /* export const PASSWORD_REGEX =
   /^(?=.*\d)(?=.*[!@#$%^&*()-+=])(?=.*[a-zA-Z]).{8,16}$/; */
+
+export type CategoryType = '예시1' | '예시2' | '예시3';
+export const CATEGORYS: CategoryType[] = ['예시1', '예시2', '예시3'];
