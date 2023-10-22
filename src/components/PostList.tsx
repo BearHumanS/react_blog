@@ -1,6 +1,9 @@
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { collection, getDocs } from 'firebase/firestore';
 import styled from 'styled-components';
+import { db } from '@/firebase';
+import AuthContext from '@/context/AuthContext';
 
 interface PostListComponentProps {
   Navigation?: boolean;
@@ -12,8 +15,32 @@ interface TabProps {
 
 type tabType = 'all' | 'my';
 
+export interface PostsProps {
+  id?: string;
+  title: string;
+  email: string;
+  summary: string;
+  content: string;
+  createdAt: string;
+}
+
 const PostListComponent = ({ Navigation = true }: PostListComponentProps) => {
   const [activeTab, setActiveTab] = useState<tabType>('all');
+  const [posts, setPosts] = useState<PostsProps[]>([]);
+  const { user } = useContext(AuthContext);
+
+  const getPosts = async () => {
+    const data = await getDocs(collection(db, 'posts'));
+
+    data?.forEach((doc) => {
+      const dataObject = { ...doc.data(), id: doc.id };
+      setPosts((prev) => [...prev, dataObject as PostsProps]);
+    });
+  };
+
+  useEffect(() => {
+    getPosts();
+  }, []);
 
   return (
     <>
@@ -37,23 +64,30 @@ const PostListComponent = ({ Navigation = true }: PostListComponentProps) => {
       )}
 
       <PostList>
-        {[...Array(10)].map((_, index) => (
-          <PostBox key={index}>
-            <Link to={`/posts/${index}`}>
-              <PostProfileBox>
-                <PostProfile />
-                <PostAuthorName>패캠</PostAuthorName>
-                <PostDate>2023</PostDate>
-              </PostProfileBox>
-              <PostTitle>게시글 {index}</PostTitle>
-              <PostText>123</PostText>
-              <PostSettings>
-                <PostDelete>삭제</PostDelete>
-                <PostEdit>수정</PostEdit>
-              </PostSettings>
-            </Link>
-          </PostBox>
-        ))}
+        {posts.length > 0 ? (
+          posts?.map((post, index) => (
+            <PostBox key={index}>
+              <Link to={`/posts/${post?.id}`}>
+                <PostProfileBox>
+                  <PostProfile />
+                  <PostAuthorName>{post.email}</PostAuthorName>
+                  <PostDate>{post.createdAt}</PostDate>
+                </PostProfileBox>
+                <PostTitle> {post.title}</PostTitle>
+                <PostSummary>{post.summary}</PostSummary>
+              </Link>
+
+              {post.email === user?.email && (
+                <PostSettings>
+                  <PostDelete>삭제</PostDelete>
+                  <PostEdit to={`/posts/edit/${post.id}`}>수정 </PostEdit>
+                </PostSettings>
+              )}
+            </PostBox>
+          ))
+        ) : (
+          <NoPost>게시글이 없습니다.</NoPost>
+        )}
       </PostList>
     </>
   );
@@ -126,7 +160,7 @@ const PostTitle = styled.div`
   margin: 14px 0px;
 `;
 
-const PostText = styled.div`
+const PostSummary = styled.div`
   color: dimgray;
   font-size: 16px;
 `;
@@ -140,17 +174,27 @@ const PostSettings = styled.div`
 `;
 
 const PostDelete = styled.div`
+  cursor: pointer;
+
   &:hover,
   &:focus {
     color: black;
   }
 `;
 
-const PostEdit = styled.div`
+const PostEdit = styled(Link)`
   &:hover,
   &:focus {
     color: black;
   }
+`;
+
+const NoPost = styled.div`
+  padding: 24px;
+  text-align: center;
+  color: gray;
+  border: 1px solid #f2f2f2;
+  border-radius: 20px;
 `;
 
 export default PostListComponent;
