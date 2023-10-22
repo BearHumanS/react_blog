@@ -1,9 +1,10 @@
 import { useContext, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { collection, getDocs } from 'firebase/firestore';
+import { Link, useNavigate } from 'react-router-dom';
+import { collection, deleteDoc, doc, getDocs } from 'firebase/firestore';
 import styled from 'styled-components';
 import { db } from '@/firebase';
 import AuthContext from '@/context/AuthContext';
+import { toast } from 'react-toastify';
 
 interface PostListComponentProps {
   Navigation?: boolean;
@@ -22,6 +23,8 @@ export interface PostsProps {
   summary: string;
   content: string;
   createdAt: string;
+  updatedAt: string;
+  uid: string;
 }
 
 const PostListComponent = ({ Navigation = true }: PostListComponentProps) => {
@@ -29,9 +32,11 @@ const PostListComponent = ({ Navigation = true }: PostListComponentProps) => {
   const [posts, setPosts] = useState<PostsProps[]>([]);
   const { user } = useContext(AuthContext);
 
+  const navigate = useNavigate();
+
   const getPosts = async () => {
     const data = await getDocs(collection(db, 'posts'));
-
+    setPosts([]);
     data?.forEach((doc) => {
       const dataObject = { ...doc.data(), id: doc.id };
       setPosts((prev) => [...prev, dataObject as PostsProps]);
@@ -41,6 +46,18 @@ const PostListComponent = ({ Navigation = true }: PostListComponentProps) => {
   useEffect(() => {
     getPosts();
   }, []);
+
+  const onDelete = async (id: string) => {
+    const confirm = window.confirm('해당 게시글을 삭제하시겠습니까?');
+
+    if (confirm && id) {
+      await deleteDoc(doc(db, 'posts', id));
+
+      toast.success('게시글을 삭제했습니다.');
+      navigate('/');
+      getPosts();
+    }
+  };
 
   return (
     <>
@@ -71,7 +88,7 @@ const PostListComponent = ({ Navigation = true }: PostListComponentProps) => {
                 <PostProfileBox>
                   <PostProfile />
                   <PostAuthorName>{post.email}</PostAuthorName>
-                  <PostDate>{post.createdAt}</PostDate>
+                  <PostDate>{post.updatedAt || post.createdAt}</PostDate>
                 </PostProfileBox>
                 <PostTitle> {post.title}</PostTitle>
                 <PostSummary>{post.summary}</PostSummary>
@@ -79,7 +96,12 @@ const PostListComponent = ({ Navigation = true }: PostListComponentProps) => {
 
               {post.email === user?.email && (
                 <PostSettings>
-                  <PostDelete>삭제</PostDelete>
+                  <PostDelete
+                    role="presentation"
+                    onClick={() => onDelete(post.id as string)}
+                  >
+                    삭제
+                  </PostDelete>
                   <PostEdit to={`/posts/edit/${post.id}`}>수정 </PostEdit>
                 </PostSettings>
               )}

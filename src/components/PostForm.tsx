@@ -1,17 +1,21 @@
-import { ChangeEvent, FormEvent, useContext, useState } from 'react';
+import { ChangeEvent, FormEvent, useContext, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-import { collection, addDoc } from 'firebase/firestore';
+import { collection, addDoc, getDoc, doc, updateDoc } from 'firebase/firestore';
 import { db } from '@/firebase';
 
 import styled from 'styled-components';
 import AuthContext from '@/context/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { PostsProps } from './PostList';
 
 const PostForm = () => {
   const [title, setTitle] = useState('');
   const [summary, setSummary] = useState('');
   const [content, setContent] = useState('');
   const { user } = useContext(AuthContext);
+  const [post, setPost] = useState<PostsProps | null>(null);
+
+  const params = useParams();
 
   const navigate = useNavigate();
 
@@ -35,16 +39,32 @@ const PostForm = () => {
     e.preventDefault();
 
     try {
-      await addDoc(collection(db, 'posts'), {
-        title,
-        summary,
-        content,
-        createdAt: new Date()?.toLocaleString(),
-        email: user?.email,
-      });
+      if (post && post.id) {
+        const postRef = doc(db, 'posts', post.id);
 
-      navigate('/');
-      toast.success('게시글을 생성했습니다.');
+        await updateDoc(postRef, {
+          title,
+          summary,
+          content,
+          updatedAt: new Date()?.toLocaleString(),
+        });
+
+        toast.success('게시글을 수정했습니다.');
+        navigate(`/posts/${post.id}`);
+      } else {
+        await addDoc(collection(db, 'posts'), {
+          title,
+          summary,
+          content,
+          createdAt: new Date()?.toLocaleString(),
+          email: user?.email,
+          uid: user?.uid,
+        });
+
+        toast.success('게시글을 생성했습니다.');
+        navigate('/');
+      }
+
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       // eslint-disable-next-line no-console
@@ -52,6 +72,29 @@ const PostForm = () => {
       toast.error(error?.code);
     }
   };
+
+  const getPost = async (id: string) => {
+    if (id) {
+      const docRef = doc(db, 'posts', id);
+      const docSnap = await getDoc(docRef);
+
+      setPost({ id: docSnap.id, ...(docSnap.data() as PostsProps) });
+    }
+  };
+
+  useEffect(() => {
+    if (params.id) {
+      getPost(params.id);
+    }
+  }, [params.id]);
+
+  useEffect(() => {
+    if (post) {
+      setTitle(post.title);
+      setSummary(post.summary);
+      setContent(post.content);
+    }
+  }, [post]);
 
   return (
     <>
@@ -89,7 +132,7 @@ const PostForm = () => {
           />
         </FormBlock>
         <FormBlock>
-          <SubmitBtn type="submit" value="제출" />
+          <SubmitBtn type="submit" value={post ? '수정' : '제출'} />
         </FormBlock>
       </StyledForm>
     </>

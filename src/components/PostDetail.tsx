@@ -1,15 +1,17 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { PostsProps } from './PostList';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, deleteDoc } from 'firebase/firestore';
 import { db } from '@/firebase';
 import Loading from './Loading';
+import { toast } from 'react-toastify';
 
 const PostDetailComponent = () => {
   const [post, setPost] = useState<PostsProps | null>(null);
 
   const params = useParams();
+  const navigate = useNavigate();
 
   const getPost = async (id: string) => {
     if (id) {
@@ -26,7 +28,16 @@ const PostDetailComponent = () => {
     }
   }, [params.id]);
 
-  const onDelete = () => {};
+  const onDelete = async () => {
+    const confirm = window.confirm('해당 게시글을 삭제하시겠습니까?');
+
+    if (confirm && post && post.id) {
+      await deleteDoc(doc(db, 'posts', post.id));
+
+      toast.success('게시글을 삭제했습니다.');
+      navigate('/');
+    }
+  };
 
   return (
     <>
