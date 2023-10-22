@@ -13,10 +13,11 @@ import styled from 'styled-components';
 import { db } from '@/firebase';
 import AuthContext from '@/context/AuthContext';
 import { toast } from 'react-toastify';
+import { CATEGORYS, CategoryType } from '@/lib/constants';
 
 interface PostListComponentProps {
   Navigation?: boolean;
-  defaultTap?: string;
+  defaultTap?: TabType | CategoryType;
 }
 
 interface TabProps {
@@ -32,15 +33,18 @@ export interface PostsProps {
   summary: string;
   content: string;
   createdAt: string;
-  updatedAt: string;
+  updatedAt?: string;
   uid: string;
+  category?: CategoryType;
 }
 
 const PostListComponent = ({
   Navigation = true,
   defaultTap = 'all',
 }: PostListComponentProps) => {
-  const [activeTab, setActiveTab] = useState<TabType>(defaultTap as TabType);
+  const [activeTab, setActiveTab] = useState<TabType | CategoryType>(
+    defaultTap,
+  );
   const [posts, setPosts] = useState<PostsProps[]>([]);
   const { user } = useContext(AuthContext);
 
@@ -56,8 +60,14 @@ const PostListComponent = ({
         where('uid', '==', user.uid),
         orderBy('createdAt', 'desc'),
       );
-    } else {
+    } else if (activeTab === 'all') {
       postQuery = query(postRef, orderBy('createdAt', 'desc'));
+    } else {
+      postQuery = query(
+        postRef,
+        where('category', '==', activeTab),
+        orderBy('createdAt', 'desc'),
+      );
     }
 
     const data = await getDocs(postQuery);
@@ -104,6 +114,16 @@ const PostListComponent = ({
           >
             나의 글
           </Tab>
+          {CATEGORYS.map((category, index) => (
+            <Tab
+              key={index}
+              role="presentation"
+              $active={activeTab === category}
+              onClick={() => setActiveTab(category)}
+            >
+              {category}
+            </Tab>
+          ))}
         </PostNavigation>
       )}
 

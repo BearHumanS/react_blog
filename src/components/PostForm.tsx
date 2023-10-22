@@ -7,19 +7,23 @@ import styled from 'styled-components';
 import AuthContext from '@/context/AuthContext';
 import { useNavigate, useParams } from 'react-router-dom';
 import { PostsProps } from './PostList';
+import { CATEGORYS, CategoryType } from '@/lib/constants';
 
 const PostForm = () => {
   const [title, setTitle] = useState('');
   const [summary, setSummary] = useState('');
   const [content, setContent] = useState('');
-  const { user } = useContext(AuthContext);
   const [post, setPost] = useState<PostsProps | null>(null);
+  const [category, setCategory] = useState<CategoryType>('예시1');
+  const { user } = useContext(AuthContext);
 
   const params = useParams();
 
   const navigate = useNavigate();
 
-  const onChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const onChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
+  ) => {
     const {
       target: { name, value },
     } = e;
@@ -32,6 +36,9 @@ const PostForm = () => {
     }
     if (name === 'content') {
       setContent(value);
+    }
+    if (name === 'category') {
+      setCategory(value as CategoryType);
     }
   };
 
@@ -47,6 +54,7 @@ const PostForm = () => {
           summary,
           content,
           updatedAt: new Date()?.toLocaleString(),
+          category,
         });
 
         toast.success('게시글을 수정했습니다.');
@@ -59,6 +67,7 @@ const PostForm = () => {
           createdAt: new Date()?.toLocaleString(),
           email: user?.email,
           uid: user?.uid,
+          category,
         });
 
         toast.success('게시글을 생성했습니다.');
@@ -93,6 +102,7 @@ const PostForm = () => {
       setTitle(post.title);
       setSummary(post.summary);
       setContent(post.content);
+      setCategory(post.category as CategoryType);
     }
   }, [post]);
 
@@ -120,6 +130,22 @@ const PostForm = () => {
             onChange={onChange}
             value={summary}
           />
+        </FormBlock>
+        <FormBlock>
+          <StyledLabel htmlFor="category">카테고리</StyledLabel>
+          <StyledSelect
+            name="category"
+            id="category"
+            onChange={onChange}
+            defaultValue={category}
+          >
+            <option value="">카테고리 선택</option>
+            {CATEGORYS.map((category, index) => (
+              <option value={category} key={index}>
+                {category}
+              </option>
+            ))}
+          </StyledSelect>
         </FormBlock>
         <FormBlock>
           <StyledLabel htmlFor="content">내용</StyledLabel>
@@ -166,6 +192,15 @@ const StyledInput = styled.input`
   border: 1px solid lightgray;
   width: 100%;
   max-width: 680px;
+`;
+
+const StyledSelect = styled.select`
+  border: 1px solid lightgray;
+  max-width: 680px;
+  height: 40px;
+  padding: 0 5px;
+  border-radius: 0.3rem;
+  text-align: center;
 `;
 
 const StyledTextarea = styled.textarea`

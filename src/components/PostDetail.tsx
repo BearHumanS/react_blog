@@ -51,6 +51,8 @@ const PostDetailComponent = () => {
               <PostDate>{post.createdAt}</PostDate>
             </PostProfileBox>
             <PostSettings>
+              {post.category && <PostCategory>{post.category}</PostCategory>}
+
               <PostDelete role="presentation" onClick={onDelete}>
                 삭제
               </PostDelete>
@@ -127,6 +129,16 @@ const PostSettings = styled.div`
   padding: 10px 0;
   border-top: 1px solid #f2f2f2;
   flex-direction: row;
+  border-bottom: 1px solid #f2f2f2;
+`;
+
+const PostCategory = styled.div`
+  color: gray;
+  border: 1px solid lightgray;
+  background: #f2f2f2;
+  padding: 0px 4px;
+  border-radius: 10px;
+  font-size: 12px;
 `;
 
 const PostDelete = styled.div`
