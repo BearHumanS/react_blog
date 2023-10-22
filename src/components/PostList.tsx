@@ -1,6 +1,14 @@
-import { useContext, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { collection, deleteDoc, doc, getDocs } from 'firebase/firestore';
+import {
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+  orderBy,
+  query,
+  where,
+} from 'firebase/firestore';
 import styled from 'styled-components';
 import { db } from '@/firebase';
 import AuthContext from '@/context/AuthContext';
@@ -8,13 +16,14 @@ import { toast } from 'react-toastify';
 
 interface PostListComponentProps {
   Navigation?: boolean;
+  defaultTap?: string;
 }
 
 interface TabProps {
   $active: boolean;
 }
 
-type tabType = 'all' | 'my';
+type TabType = 'all' | 'my';
 
 export interface PostsProps {
   id?: string;
@@ -27,25 +36,43 @@ export interface PostsProps {
   uid: string;
 }
 
-const PostListComponent = ({ Navigation = true }: PostListComponentProps) => {
-  const [activeTab, setActiveTab] = useState<tabType>('all');
+const PostListComponent = ({
+  Navigation = true,
+  defaultTap = 'all',
+}: PostListComponentProps) => {
+  const [activeTab, setActiveTab] = useState<TabType>(defaultTap as TabType);
   const [posts, setPosts] = useState<PostsProps[]>([]);
   const { user } = useContext(AuthContext);
 
   const navigate = useNavigate();
 
-  const getPosts = async () => {
-    const data = await getDocs(collection(db, 'posts'));
+  const getPosts = useCallback(async () => {
+    const postRef = collection(db, 'posts');
+    let postQuery;
+
+    if (activeTab === 'my' && user) {
+      postQuery = query(
+        postRef,
+        where('uid', '==', user.uid),
+        orderBy('createdAt', 'desc'),
+      );
+    } else {
+      postQuery = query(postRef, orderBy('createdAt', 'desc'));
+    }
+
+    const data = await getDocs(postQuery);
+
     setPosts([]);
+
     data?.forEach((doc) => {
       const dataObject = { ...doc.data(), id: doc.id };
       setPosts((prev) => [...prev, dataObject as PostsProps]);
     });
-  };
+  }, [activeTab, user, setPosts]);
 
   useEffect(() => {
     getPosts();
-  }, []);
+  }, [getPosts]);
 
   const onDelete = async (id: string) => {
     const confirm = window.confirm('해당 게시글을 삭제하시겠습니까?');
@@ -102,7 +129,7 @@ const PostListComponent = ({ Navigation = true }: PostListComponentProps) => {
                   >
                     삭제
                   </PostDelete>
-                  <PostEdit to={`/posts/edit/${post.id}`}>수정 </PostEdit>
+                  <PostEdit to={`/posts/edit/${post.id}`}>수정</PostEdit>
                 </PostSettings>
               )}
             </PostBox>

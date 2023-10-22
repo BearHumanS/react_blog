@@ -25,7 +25,7 @@ function App() {
 
   return (
     <>
-      <ToastContainer />
+      <ToastContainer position="top-center" closeOnClick={true} />
       {init ? <Router isAuthenticated={isAuthenticated} /> : <Loading />}
     </>
   );

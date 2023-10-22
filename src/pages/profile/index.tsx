@@ -5,7 +5,7 @@ const ProfilePage = () => {
   return (
     <>
       <Profile />
-      <PostList Navigation={false} />
+      <PostList Navigation={false} defaultTap="my" />
     </>
   );
 };
