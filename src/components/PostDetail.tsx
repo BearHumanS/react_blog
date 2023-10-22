@@ -1,25 +1,57 @@
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
+import { PostsProps } from './PostList';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '@/firebase';
+import Loading from './Loading';
 
 const PostDetailComponent = () => {
+  const [post, setPost] = useState<PostsProps | null>(null);
+
+  const params = useParams();
+
+  const getPost = async (id: string) => {
+    if (id) {
+      const docRef = doc(db, 'posts', id);
+      const docSnap = await getDoc(docRef);
+
+      setPost({ id: docSnap.id, ...(docSnap.data() as PostsProps) });
+    }
+  };
+
+  useEffect(() => {
+    if (params.id) {
+      getPost(params.id);
+    }
+  }, [params.id]);
+
+  const onDelete = () => {};
+
   return (
     <>
       <PostDetail>
-        <PostBox>
-          <PostTitle>adfsfdsfsfs</PostTitle>
-          <PostProfileBox>
-            <PostProfile />
-            <PostAuthorName>패캠</PostAuthorName>
-            <PostDate>2023</PostDate>
-          </PostProfileBox>
-          <PostSettings>
-            <PostDelete>삭제</PostDelete>
-            <PostEdit>
-              <Link to={`/posts/edit/1`}>수정 </Link>
-            </PostEdit>
-          </PostSettings>
-          <PostText>asdfsdfdsfadsfdsf</PostText>
-        </PostBox>
+        {post ? (
+          <PostBox>
+            <PostTitle>{post.title}</PostTitle>
+            <PostProfileBox>
+              <PostProfile />
+              <PostAuthorName>{post.email}</PostAuthorName>
+              <PostDate>{post.createdAt}</PostDate>
+            </PostProfileBox>
+            <PostSettings>
+              <PostDelete role="presentation" onClick={onDelete}>
+                삭제
+              </PostDelete>
+              <PostEdit>
+                <Link to={`/posts/edit/${post.id}`}>수정</Link>
+              </PostEdit>
+            </PostSettings>
+            <PostText>{post.content}</PostText>
+          </PostBox>
+        ) : (
+          <Loading />
+        )}
       </PostDetail>
     </>
   );
@@ -73,6 +105,7 @@ const PostText = styled.div`
   color: dimgray;
   font-size: 16px;
   padding: 20px 0;
+  white-space: pre-wrap;
 `;
 
 const PostSettings = styled.div`

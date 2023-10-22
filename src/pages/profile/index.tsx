@@ -1,4 +1,4 @@
-import Profile from '@/components/Profile.1';
+import Profile from '@/components/Profile';
 import PostList from '@/components/PostList';
 
 const ProfilePage = () => {
