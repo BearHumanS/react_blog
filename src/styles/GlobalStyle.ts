@@ -63,6 +63,10 @@ const GlobalStyle = createGlobalStyle`
   * {
     box-sizing: inherit;
   }
+
+  textarea {
+    resize: none;
+  }
 `;
 
 export default GlobalStyle;

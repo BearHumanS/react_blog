@@ -1,5 +1,5 @@
 import { useCallback, useContext, useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   collection,
   deleteDoc,
@@ -42,11 +42,20 @@ const PostListComponent = ({
   Navigation = true,
   defaultTap = 'all',
 }: PostListComponentProps) => {
+  const location = useLocation();
+  const selectedCategory = location.state?.selectedCategory;
+
   const [activeTab, setActiveTab] = useState<TabType | CategoryType>(
-    defaultTap,
+    selectedCategory || defaultTap,
   );
   const [posts, setPosts] = useState<PostsProps[]>([]);
   const { user } = useContext(AuthContext);
+
+  useEffect(() => {
+    if (!selectedCategory) {
+      setActiveTab(defaultTap);
+    }
+  }, [selectedCategory, defaultTap]);
 
   const navigate = useNavigate();
 
@@ -177,6 +186,7 @@ const Tab = styled.div<TabProps>`
   cursor: pointer;
   padding: 10px;
   color: ${(props) => (props.$active ? 'black' : 'gray')};
+  font-weight: ${(props) => (props.$active ? '600' : '400')};
 `;
 
 /* const PostAll = styled.div`
@@ -187,18 +197,18 @@ const Tab = styled.div<TabProps>`
 const PostMy = styled.div``; */
 
 const PostList = styled.div`
-  min-height: 90vh;
   padding: 20px;
   text-align: left;
   line-height: 24px;
   max-width: 680px;
   margin: 0 auto;
   margin-bottom: 40px;
+  flex: 1;
 `;
 
 const PostBox = styled.div`
   padding: 24px 0;
-  border-top: 1px solid #f2f2f2;
+  border-bottom: 1px solid #f2f2f2;
 `;
 
 const PostProfileBox = styled.div`

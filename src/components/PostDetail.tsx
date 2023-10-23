@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { PostsProps } from './PostList';
@@ -6,9 +6,11 @@ import { doc, getDoc, deleteDoc } from 'firebase/firestore';
 import { db } from '@/firebase';
 import Loading from './Loading';
 import { toast } from 'react-toastify';
+import AuthContext from '@/context/AuthContext';
 
 const PostDetailComponent = () => {
   const [post, setPost] = useState<PostsProps | null>(null);
+  const { user } = useContext(AuthContext);
 
   const params = useParams();
   const navigate = useNavigate();
@@ -39,6 +41,14 @@ const PostDetailComponent = () => {
     }
   };
 
+  const onCategoryClick = () => {
+    navigate('/', {
+      state: {
+        selectedCategory: post?.category === 'free' ? 'all' : post?.category,
+      },
+    });
+  };
+
   return (
     <>
       <PostDetail>
@@ -51,14 +61,22 @@ const PostDetailComponent = () => {
               <PostDate>{post.createdAt}</PostDate>
             </PostProfileBox>
             <PostSettings>
-              {post.category && <PostCategory>{post.category}</PostCategory>}
+              {post.category && (
+                <PostCategory onClick={onCategoryClick}>
+                  {post.category}
+                </PostCategory>
+              )}
 
-              <PostDelete role="presentation" onClick={onDelete}>
-                삭제
-              </PostDelete>
-              <PostEdit>
-                <Link to={`/posts/edit/${post.id}`}>수정</Link>
-              </PostEdit>
+              {post.email === user?.email && (
+                <>
+                  <PostDelete role="presentation" onClick={onDelete}>
+                    삭제
+                  </PostDelete>
+                  <PostEdit>
+                    <Link to={`/posts/edit/${post.id}`}>수정</Link>
+                  </PostEdit>
+                </>
+              )}
             </PostSettings>
             <PostText>{post.content}</PostText>
           </PostBox>
@@ -133,6 +151,7 @@ const PostSettings = styled.div`
 `;
 
 const PostCategory = styled.div`
+  cursor: pointer;
   color: gray;
   border: 1px solid lightgray;
   background: #f2f2f2;
