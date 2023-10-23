@@ -14,7 +14,7 @@ const PostForm = () => {
   const [summary, setSummary] = useState('');
   const [content, setContent] = useState('');
   const [post, setPost] = useState<PostsProps | null>(null);
-  const [category, setCategory] = useState<CategoryType>('예시1');
+  const [category, setCategory] = useState<CategoryType>('free');
   const { user } = useContext(AuthContext);
 
   const params = useParams();
@@ -137,9 +137,9 @@ const PostForm = () => {
             name="category"
             id="category"
             onChange={onChange}
-            defaultValue={category}
+            defaultValue=""
           >
-            <option value="">카테고리 선택</option>
+            <option value="">선택</option>
             {CATEGORYS.map((category, index) => (
               <option value={category} key={index}>
                 {category}
@@ -197,6 +197,7 @@ const StyledInput = styled.input`
 const StyledSelect = styled.select`
   border: 1px solid lightgray;
   max-width: 680px;
+  min-width: 120px;
   height: 40px;
   padding: 0 5px;
   border-radius: 0.3rem;
