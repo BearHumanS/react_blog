@@ -99,7 +99,7 @@ const PostDetail = styled.div`
 
 const PostBox = styled.div`
   padding: 24px 0;
-  border-top: 1px solid #f2f2f2;
+  border-bottom: 1px solid #f2f2f2;
 `;
 
 const PostTitle = styled.div`
@@ -107,6 +107,7 @@ const PostTitle = styled.div`
   font-weight: 600;
   margin: 14px 0px;
   line-height: 40px;
+  color: ${(props) => props.theme.content};
 `;
 
 const PostProfileBox = styled.div`
@@ -125,15 +126,15 @@ const PostProfile = styled.div`
 `;
 
 const PostAuthorName = styled.div`
-  color: gray;
+  color: ${(props) => props.theme.profile};
 `;
 
 const PostDate = styled.div`
-  color: gray;
+  color: ${(props) => props.theme.profile};
 `;
 
 const PostText = styled.div`
-  color: dimgray;
+  color: ${(props) => props.theme.content};
   font-size: 16px;
   padding: 20px 0;
   white-space: pre-wrap;
@@ -162,17 +163,20 @@ const PostCategory = styled.div`
 
 const PostDelete = styled.div`
   cursor: pointer;
+  color: ${(props) => props.theme.color};
 
   &:hover,
   &:focus {
-    color: black;
+    color: ${(props) => props.theme.hoverColor};
   }
 `;
 
 const PostEdit = styled.div`
+  color: ${(props) => props.theme.color};
+
   &:hover,
   &:focus {
-    color: black;
+    color: ${(props) => props.theme.hoverColor};
   }
 `;
 

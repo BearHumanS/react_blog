@@ -17,19 +17,20 @@ const HeaderComponent = () => {
 const Header = styled.header`
   display: flex;
   justify-content: space-between;
-  border-bottom: 1px solid #f2f2f2;
+  border-bottom: 1px solid lightgray;
   padding: 10px 40px;
   min-height: 80px;
   align-items: center;
   position: sticky;
   top: 0;
   z-index: 1000;
-  background-color: white;
+  background-color: ${(props) => props.theme.secondaryBackgroundColor};
 `;
 
 const StyledLink = styled(Link)`
   font-weight: 600;
   font-size: 18px;
+  color: ${(props) => props.theme.content};
 `;
 
 const Navbar = styled.div`
@@ -38,11 +39,11 @@ const Navbar = styled.div`
 
   & > a {
     margin: 0px 10px;
-    color: gray;
+    color: ${(props) => props.theme.color};
 
     &:hover,
     &:focus {
-      color: black;
+      color: ${(props) => props.theme.hoverColor};
     }
   }
 `;
