@@ -50,6 +50,10 @@ const ProfileBox = styled.div`
   line-height: 24px;
   justify-content: space-between;
   padding: 20px;
+  background-color: ${(props) => props.theme.profileBox};
+  border-radius: 20px;
+  margin-top: 30px;
+  margin-bottom: 30px;
 `;
 
 const ProfileFlex = styled.div`
@@ -77,13 +81,14 @@ const ProfileUserName = styled.div`
 `;
 
 const ProfileLogout = styled.div`
-  color: gray;
+  color: ${(props) => props.theme.logout};
   font-size: 14px;
   cursor: pointer;
+  text-decoration: underline;
 
   &:hover,
   &:focus {
-    color: black;
+    color: ${(props) => props.theme.logoutHover};
   }
 `;
 

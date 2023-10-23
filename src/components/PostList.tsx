@@ -14,13 +14,14 @@ import { db } from '@/firebase';
 import AuthContext from '@/context/AuthContext';
 import { toast } from 'react-toastify';
 import { CATEGORYS, CategoryType } from '@/lib/constants';
+import ThemeContext from '@/context/ThemeContext';
 
 interface PostListComponentProps {
   Navigation?: boolean;
   defaultTap?: TabType | CategoryType;
 }
 
-interface TabProps {
+export interface TabProps {
   $active: boolean;
 }
 
@@ -38,6 +39,10 @@ export interface PostsProps {
   category?: CategoryType;
 }
 
+interface StyledProps {
+  theme: string;
+}
+
 const PostListComponent = ({
   Navigation = true,
   defaultTap = 'all',
@@ -50,6 +55,7 @@ const PostListComponent = ({
   );
   const [posts, setPosts] = useState<PostsProps[]>([]);
   const { user } = useContext(AuthContext);
+  const context = useContext(ThemeContext);
 
   useEffect(() => {
     if (!selectedCategory) {
@@ -108,7 +114,7 @@ const PostListComponent = ({
   return (
     <>
       {Navigation && (
-        <PostNavigation>
+        <PostNavigation theme={context.theme}>
           <Tab
             role="presentation"
             $active={activeTab === 'all'}
@@ -171,7 +177,7 @@ const PostListComponent = ({
   );
 };
 
-const PostNavigation = styled.div`
+const PostNavigation = styled.div<StyledProps>`
   display: flex;
   gap: 12px;
   margin: 0 auto;
@@ -180,12 +186,14 @@ const PostNavigation = styled.div`
   color: gray;
   cursor: pointer;
   padding: 48px 20px 0 20px;
+  border-bottom: 1px solid #f2f2f2;
+  padding-bottom: 15px;
 `;
 
 const Tab = styled.div<TabProps>`
   cursor: pointer;
   padding: 10px;
-  color: ${(props) => (props.$active ? 'black' : 'gray')};
+  color: ${(props) => (props.$active ? props.theme.content : 'gray')};
   font-weight: ${(props) => (props.$active ? '600' : '400')};
 `;
 
@@ -203,7 +211,7 @@ const PostList = styled.div`
   max-width: 680px;
   margin: 0 auto;
   margin-bottom: 40px;
-  flex: 1;
+  min-height: 100vh;
 `;
 
 const PostBox = styled.div`
@@ -226,22 +234,24 @@ const PostProfile = styled.div`
 `;
 
 const PostAuthorName = styled.div`
-  color: gray;
+  color: ${(props) => props.theme.profile};
 `;
 
 const PostDate = styled.div`
-  color: gray;
+  color: ${(props) => props.theme.profile};
 `;
 
 const PostTitle = styled.div`
   font-size: 20px;
   font-weight: 600;
   margin: 14px 0px;
+  color: ${(props) => props.theme.content};
 `;
 
 const PostSummary = styled.div`
   color: dimgray;
   font-size: 16px;
+  color: ${(props) => props.theme.content};
 `;
 
 const PostSettings = styled.div`
@@ -254,17 +264,20 @@ const PostSettings = styled.div`
 
 const PostDelete = styled.div`
   cursor: pointer;
+  color: ${(props) => props.theme.color};
 
   &:hover,
   &:focus {
-    color: black;
+    color: ${(props) => props.theme.hoverColor};
   }
 `;
 
 const PostEdit = styled(Link)`
+  color: ${(props) => props.theme.color};
+
   &:hover,
   &:focus {
-    color: black;
+    color: ${(props) => props.theme.hoverColor};
   }
 `;
 
