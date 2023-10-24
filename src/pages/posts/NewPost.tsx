@@ -1,6 +1,6 @@
 import PostForm from '@/components/PostForm';
 
-const newPost = () => {
+const NewPost = () => {
   return (
     <>
       <PostForm />
@@ -8,4 +8,4 @@ const newPost = () => {
   );
 };
 
-export default newPost;
+export default NewPost;
