@@ -7,7 +7,7 @@ import styled from 'styled-components';
 import AuthContext from '@/context/AuthContext';
 import { useNavigate, useParams } from 'react-router-dom';
 import { PostsProps } from './PostList';
-import { CATEGORYS, CategoryType } from '@/lib/constants';
+import { CATEGORYS, CategoryType, useAdmin } from '@/lib/constants';
 
 const PostForm = () => {
   const [title, setTitle] = useState('');
@@ -17,9 +17,18 @@ const PostForm = () => {
   const [category, setCategory] = useState<CategoryType>('free');
   const { user } = useContext(AuthContext);
 
-  const params = useParams();
+  const isAdmin = useAdmin();
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!isAdmin) {
+      toast.success('관리자만 접근가능합니다.');
+      navigate('/');
+    }
+  }, [isAdmin, navigate]);
+
+  const params = useParams();
 
   const onChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
