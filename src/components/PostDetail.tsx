@@ -7,6 +7,7 @@ import { db } from '@/firebase';
 import Loading from './Loading';
 import { toast } from 'react-toastify';
 import AuthContext from '@/context/AuthContext';
+import Comment from './Comment';
 
 const PostDetailComponent = () => {
   const [post, setPost] = useState<PostsProps | null>(null);
@@ -53,33 +54,36 @@ const PostDetailComponent = () => {
     <>
       <PostDetail>
         {post ? (
-          <PostBox>
-            <PostTitle>{post.title}</PostTitle>
-            <PostProfileBox>
-              <PostProfile />
-              <PostAuthorName>{post.email}</PostAuthorName>
-              <PostDate>{post.createdAt}</PostDate>
-            </PostProfileBox>
-            <PostSettings>
-              {post.category && (
-                <PostCategory onClick={onCategoryClick}>
-                  {post.category}
-                </PostCategory>
-              )}
+          <>
+            <PostBox>
+              <PostTitle>{post.title}</PostTitle>
+              <PostProfileBox>
+                <PostProfile />
+                <PostAuthorName>{post.email}</PostAuthorName>
+                <PostDate>{post.createdAt}</PostDate>
+              </PostProfileBox>
+              <PostSettings>
+                {post.category && (
+                  <PostCategory onClick={onCategoryClick}>
+                    {post.category}
+                  </PostCategory>
+                )}
 
-              {post.email === user?.email && (
-                <>
-                  <PostDelete role="presentation" onClick={onDelete}>
-                    삭제
-                  </PostDelete>
-                  <PostEdit>
-                    <Link to={`/posts/edit/${post.id}`}>수정</Link>
-                  </PostEdit>
-                </>
-              )}
-            </PostSettings>
-            <PostText>{post.content}</PostText>
-          </PostBox>
+                {post.email === user?.email && (
+                  <>
+                    <PostDelete role="presentation" onClick={onDelete}>
+                      삭제
+                    </PostDelete>
+                    <PostEdit>
+                      <Link to={`/posts/edit/${post.id}`}>수정</Link>
+                    </PostEdit>
+                  </>
+                )}
+              </PostSettings>
+              <PostText>{post.content}</PostText>
+            </PostBox>
+            <Comment post={post} getPost={getPost} />
+          </>
         ) : (
           <Loading />
         )}
