@@ -15,6 +15,7 @@ interface CommentProps {
 const Comment = ({ post, getPost }: CommentProps) => {
   const [comment, setComment] = useState('');
   const { user } = useContext(AuthContext);
+  const [isLoading, setIsLoading] = useState(false);
 
   const comments = post?.comments;
 
@@ -30,6 +31,7 @@ const Comment = ({ post, getPost }: CommentProps) => {
 
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsLoading(true);
 
     try {
       if (post && post?.id) {
@@ -57,6 +59,8 @@ const Comment = ({ post, getPost }: CommentProps) => {
       // eslint-disable-next-line no-console
       console.log(error);
       toast.error(error?.code);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -91,7 +95,7 @@ const Comment = ({ post, getPost }: CommentProps) => {
             />
           </FormBlock>
           <BlockReverse>
-            <SubmitBtn type="submit" value="입력" />
+            <SubmitBtn type="submit" value="입력" disabled={isLoading} />
           </BlockReverse>
         </CommentForm>
 

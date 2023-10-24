@@ -12,6 +12,7 @@ const SignUpForm = () => {
   const [password, setPassword] = useState('');
   const [passwordConfrim, setpasswordConfrim] = useState('');
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -20,6 +21,8 @@ const SignUpForm = () => {
 
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsLoading(true);
+
     try {
       const auth = getAuth(app);
       await createUserWithEmailAndPassword(auth, email, password);
@@ -31,6 +34,8 @@ const SignUpForm = () => {
       // eslint-disable-next-line no-console
       console.log(error);
       toast.error(error?.code);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -125,7 +130,7 @@ const SignUpForm = () => {
           <SubmitBtn
             type="submit"
             value="회원가입"
-            disabled={error?.length > 0}
+            disabled={isLoading || error?.length > 0}
           />
         </FormBlock>
       </StyledForm>

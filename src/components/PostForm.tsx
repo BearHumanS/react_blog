@@ -16,6 +16,7 @@ const PostForm = () => {
   const [post, setPost] = useState<PostsProps | null>(null);
   const [category, setCategory] = useState<CategoryType>('free');
   const { user } = useContext(AuthContext);
+  const [isLoading, setIsLoading] = useState(false);
 
   const isAdmin = useAdmin();
 
@@ -53,7 +54,7 @@ const PostForm = () => {
 
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+    setIsLoading(true);
     try {
       if (post && post.id) {
         const postRef = doc(db, 'posts', post.id);
@@ -88,6 +89,8 @@ const PostForm = () => {
       // eslint-disable-next-line no-console
       console.log(error);
       toast.error(error?.code);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -167,7 +170,11 @@ const PostForm = () => {
           />
         </FormBlock>
         <FormBlock>
-          <SubmitBtn type="submit" value={post ? '수정' : '제출'} />
+          <SubmitBtn
+            type="submit"
+            value={post ? '수정' : '제출'}
+            disabled={isLoading}
+          />
         </FormBlock>
       </StyledForm>
     </>

@@ -11,6 +11,7 @@ const LoginForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -44,6 +45,7 @@ const LoginForm = () => {
 
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsLoading(true);
 
     try {
       const auth = getAuth(app);
@@ -56,6 +58,8 @@ const LoginForm = () => {
       // eslint-disable-next-line no-console
       console.log(error);
       toast.error(error?.code);
+    } finally {
+      setIsLoading(false);
     }
   };
   return (
@@ -99,7 +103,7 @@ const LoginForm = () => {
           <SubmitBtn
             type="submit"
             value="로그인"
-            disabled={error?.length > 0}
+            disabled={isLoading || error?.length > 0}
           />
         </FormBlock>
       </StyledForm>
