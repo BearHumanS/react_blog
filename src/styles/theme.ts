@@ -13,6 +13,8 @@ export const theme: DefaultTheme = {
     logoutHover: 'red',
     content: 'black',
     profileBox: 'white',
+    login: '#2563eb',
+    loginHover: '#0037af',
   },
   dark: {
     backgroundColor: '#1e2937',
@@ -25,5 +27,7 @@ export const theme: DefaultTheme = {
     logoutHover: 'red',
     content: 'white',
     profileBox: '#364e66',
+    login: '#2563eb',
+    loginHover: '#6f99f2',
   },
 };

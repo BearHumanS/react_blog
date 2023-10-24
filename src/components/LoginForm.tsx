@@ -112,7 +112,7 @@ const StyledForm = styled.form`
   max-width: 680px;
   padding: 20px;
   margin-top: 20px;
-  min-height: 70vh;
+  min-height: 80vh;
   margin-top: 10vh;
 
   & > div {
@@ -127,12 +127,14 @@ const StyledLogin = styled.h1`
   font-weight: 600;
   text-align: center;
   margin-bottom: 4px;
+  color: ${(props) => props.theme.content};
 `;
 
 const FormBlock = styled.div`
   margin-top: 20px;
   width: 100%;
   white-space: pre-wrap;
+  color: ${(props) => props.theme.content};
 `;
 
 const StyledLabel = styled.label`
@@ -140,6 +142,7 @@ const StyledLabel = styled.label`
   font-weight: 500;
   margin-bottom: 10px;
   margin-top: 20px;
+  color: ${(props) => props.theme.content};
 `;
 
 const FormError = styled.div`
@@ -156,11 +159,11 @@ const StyledInput = styled.input`
 `;
 
 const StyledSignUp = styled(Link)`
-  color: gray;
+  color: ${(props) => props.theme.login};
   text-decoration: underline;
 
   &:hover {
-    color: #2563eb;
+    color: ${(props) => props.theme.loginHover};
     font-weight: 500;
   }
 `;

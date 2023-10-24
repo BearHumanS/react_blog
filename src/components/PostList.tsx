@@ -40,7 +40,8 @@ export interface PostsProps {
 }
 
 interface StyledProps {
-  theme: string;
+  theme?: string;
+  $minHeight?: string;
 }
 
 const PostListComponent = ({
@@ -62,6 +63,15 @@ const PostListComponent = ({
       setActiveTab(defaultTap);
     }
   }, [selectedCategory, defaultTap]);
+
+  let minHeight;
+  if (location.pathname === '/') {
+    minHeight = '28vh';
+  } else if (location.pathname === '/posts') {
+    minHeight = '85vh';
+  } else if (location.pathname === '/profile') {
+    minHeight = '68vh';
+  }
 
   const navigate = useNavigate();
 
@@ -142,7 +152,7 @@ const PostListComponent = ({
         </PostNavigation>
       )}
 
-      <PostList>
+      <PostList $minHeight={minHeight}>
         {posts.length > 0 ? (
           posts?.map((post, index) => (
             <PostBox key={index}>
@@ -204,14 +214,14 @@ const Tab = styled.div<TabProps>`
 
 const PostMy = styled.div``; */
 
-const PostList = styled.div`
+const PostList = styled.div<StyledProps>`
   padding: 20px;
   text-align: left;
   line-height: 24px;
   max-width: 680px;
   margin: 0 auto;
   margin-bottom: 40px;
-  min-height: 100vh;
+  min-height: ${(props) => props.$minHeight};
 `;
 
 const PostBox = styled.div`
@@ -284,9 +294,9 @@ const PostEdit = styled(Link)`
 const NoPost = styled.div`
   padding: 24px;
   text-align: center;
-  color: gray;
   border: 1px solid #f2f2f2;
   border-radius: 20px;
+  color: ${(props) => props.theme.color};
 `;
 
 export default PostListComponent;
