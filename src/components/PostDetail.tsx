@@ -12,7 +12,6 @@ import Comment from './Comment';
 const PostDetailComponent = () => {
   const [post, setPost] = useState<PostsProps | null>(null);
   const { user } = useContext(AuthContext);
-
   const params = useParams();
   const navigate = useNavigate();
 
