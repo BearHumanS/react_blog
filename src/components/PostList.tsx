@@ -27,6 +27,13 @@ export interface TabProps {
 
 type TabType = 'all' | 'my';
 
+export interface CommentsInterface {
+  uid: string;
+  content: string;
+  email: string;
+  createdAt: string;
+}
+
 export interface PostsProps {
   id?: string;
   title: string;
@@ -37,6 +44,7 @@ export interface PostsProps {
   updatedAt?: string;
   uid: string;
   category?: CategoryType;
+  comments?: CommentsInterface[];
 }
 
 interface StyledProps {
