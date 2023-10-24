@@ -13,7 +13,7 @@ import styled from 'styled-components';
 import { db } from '@/firebase';
 import AuthContext from '@/context/AuthContext';
 import { toast } from 'react-toastify';
-import { CATEGORYS, CategoryType } from '@/lib/constants';
+import { CATEGORYS, CategoryType, useAdmin } from '@/lib/constants';
 import ThemeContext from '@/context/ThemeContext';
 
 interface PostListComponentProps {
@@ -65,6 +65,8 @@ const PostListComponent = ({
   const [posts, setPosts] = useState<PostsProps[]>([]);
   const { user } = useContext(AuthContext);
   const context = useContext(ThemeContext);
+
+  const isAdmin = useAdmin();
 
   useEffect(() => {
     if (!selectedCategory) {
@@ -140,13 +142,16 @@ const PostListComponent = ({
           >
             전체
           </Tab>
-          <Tab
-            role="presentation"
-            $active={activeTab === 'my'}
-            onClick={() => setActiveTab('my')}
-          >
-            나의 글
-          </Tab>
+          {isAdmin && (
+            <Tab
+              role="presentation"
+              $active={activeTab === 'my'}
+              onClick={() => setActiveTab('my')}
+            >
+              나의 글
+            </Tab>
+          )}
+
           {CATEGORYS.map((category, index) => (
             <Tab
               key={index}

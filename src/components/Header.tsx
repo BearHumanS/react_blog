@@ -1,12 +1,14 @@
+import { useAdmin } from '@/lib/constants';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 const HeaderComponent = () => {
+  const isAdmin = useAdmin();
   return (
     <Header>
       <StyledLink to="/">Blog</StyledLink>
       <Navbar>
-        <Link to="/posts/new">글쓰기</Link>
+        {isAdmin && <Link to="/posts/new">글쓰기</Link>}
         <Link to="/posts">게시글</Link>
         <Link to="/profile">프로필</Link>
       </Navbar>
