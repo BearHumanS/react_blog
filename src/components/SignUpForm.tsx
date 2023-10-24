@@ -77,7 +77,7 @@ const SignUpForm = () => {
   return (
     <>
       <StyledForm onSubmit={onSubmit}>
-        <StyledLogin>회원가입</StyledLogin>
+        <StyledSignup>회원가입</StyledSignup>
         <FormBlock>
           <StyledLabel htmlFor="email">이메일</StyledLabel>
           <StyledInput
@@ -138,7 +138,7 @@ const StyledForm = styled.form`
   max-width: 680px;
   padding: 20px;
   margin-top: 20px;
-  min-height: 70vh;
+  min-height: 80vh;
   margin-top: 10vh;
 
   & > div {
@@ -148,17 +148,19 @@ const StyledForm = styled.form`
   }
 `;
 
-const StyledLogin = styled.h1`
+const StyledSignup = styled.h1`
   font-size: 36px;
   font-weight: 600;
   text-align: center;
   margin-bottom: 4px;
+  color: ${(props) => props.theme.content};
 `;
 
 const FormBlock = styled.div`
   margin-top: 20px;
   width: 100%;
   white-space: pre-wrap;
+  color: ${(props) => props.theme.content};
 `;
 
 const FormError = styled.div`
@@ -182,11 +184,11 @@ const StyledInput = styled.input`
 `;
 
 const StyledSignUp = styled(Link)`
-  color: gray;
+  color: ${(props) => props.theme.login};
   text-decoration: underline;
 
   &:hover {
-    color: #2563eb;
+    color: ${(props) => props.theme.loginHover};
     font-weight: 500;
   }
 `;
