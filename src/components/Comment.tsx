@@ -224,6 +224,7 @@ const CommentDelete = styled.div`
 const CommentText = styled.div`
   font-size: 14px;
   padding-top: 4px;
+  white-space: pre-wrap;
 `;
 
 export default Comment;

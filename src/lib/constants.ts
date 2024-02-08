@@ -12,8 +12,8 @@ export const EMAIL_REGEX =
 /* export const PASSWORD_REGEX =
   /^(?=.*\d)(?=.*[!@#$%^&*()-+=])(?=.*[a-zA-Z]).{8,16}$/; */
 
-export type CategoryType = 'free' | '예시1' | '예시2' | '예시3';
-export const CATEGORYS: CategoryType[] = ['예시1', '예시2', '예시3'];
+export type CategoryType = 'free' | '면접질문' | '스터디' | '예시3';
+export const CATEGORYS: CategoryType[] = ['면접질문', '스터디', '예시3'];
 
 export const useAdmin = () => {
   const { user } = useContext(AuthContext);

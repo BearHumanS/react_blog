@@ -96,7 +96,7 @@ const PostListComponent = ({
         orderBy('createdAt', 'desc'),
       );
     } else if (activeTab === 'all') {
-      postQuery = query(postRef, orderBy('createdAt', 'desc'));
+      postQuery = query(postRef, orderBy('createdAt', 'asc'));
     } else {
       postQuery = query(
         postRef,

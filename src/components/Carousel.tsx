@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import styled from 'styled-components';
 import { images } from '@/lib/constants';
 
@@ -9,13 +9,9 @@ interface CarouselDotProps {
 const Carousel = () => {
   const [activeImage, setActiveImage] = useState(0);
 
-  const PrevImage = () => {
-    setActiveImage((prev) => (prev - 1 + images.length) % images.length);
-  };
-
-  const NextImage = () => {
-    setActiveImage((prev) => (prev + 1) % images.length);
-  };
+  const changeImage = useCallback((delta: number) => {
+    setActiveImage((prev) => (prev + delta + images.length) % images.length);
+  }, []);
 
   return (
     <>
@@ -35,10 +31,10 @@ const Carousel = () => {
                   <img src={image} alt={`scenery ${index + 1}`} />
                 </CarouselSlideImage>
                 <CarouselControls>
-                  <CarouselPrev onClick={PrevImage}>
+                  <CarouselPrev onClick={() => changeImage(-1)}>
                     <span>&lsaquo;</span>
                   </CarouselPrev>
-                  <CarouselNext onClick={NextImage}>
+                  <CarouselNext onClick={() => changeImage(1)}>
                     <span>&rsaquo;</span>
                   </CarouselNext>
                 </CarouselControls>

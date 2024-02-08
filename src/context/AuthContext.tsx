@@ -19,7 +19,7 @@ export const AuthContextProvider = ({ children }: AuthProps) => {
       if (user) {
         setCurrentUser(user);
       } else {
-        setCurrentUser(user);
+        setCurrentUser(null);
       }
     });
   }, [auth]);
