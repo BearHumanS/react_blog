@@ -4,6 +4,7 @@ import { app } from '@/firebase';
 import { getAuth, signOut } from 'firebase/auth';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
+import { PROFILE_DEFAULT_IMG } from '@/lib/constants';
 
 const Profile = () => {
   const { user } = useContext(AuthContext);
@@ -25,7 +26,18 @@ const Profile = () => {
     <>
       <ProfileBox>
         <ProfileFlex>
-          <ProfileImage />
+          <ProfileImage>
+            {user?.photoURL ? (
+              <img src={user.photoURL} alt="프로필" width={72} height={72} />
+            ) : (
+              <img
+                src={PROFILE_DEFAULT_IMG}
+                alt="프로필"
+                width={72}
+                height={72}
+              />
+            )}
+          </ProfileImage>
           <ProfileUserInfo>
             <ProfileEmail>{user?.email}</ProfileEmail>
             <ProfileUserName>{user?.displayName || '사용자'}</ProfileUserName>
@@ -65,7 +77,7 @@ const ProfileFlex = styled.div`
 const ProfileImage = styled.div`
   width: 72px;
   height: 72px;
-  background-color: #f2f2f2;
+
   border-radius: 50%;
 `;
 

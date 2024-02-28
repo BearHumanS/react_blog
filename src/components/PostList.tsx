@@ -13,7 +13,12 @@ import styled from 'styled-components';
 import { db } from '@/firebase';
 import AuthContext from '@/context/AuthContext';
 import { toast } from 'react-toastify';
-import { CATEGORYS, CategoryType, useAdmin } from '@/lib/constants';
+import {
+  CATEGORYS,
+  CategoryType,
+  PROFILE_DEFAULT_IMG,
+  useAdmin,
+} from '@/lib/constants';
 import ThemeContext from '@/context/ThemeContext';
 
 interface PostListComponentProps {
@@ -171,7 +176,23 @@ const PostListComponent = ({
             <PostBox key={index}>
               <Link to={`/posts/${post?.id}`}>
                 <PostProfileBox>
-                  <PostProfile />
+                  <PostProfile>
+                    {user?.photoURL ? (
+                      <img
+                        src={user.photoURL}
+                        alt="프로필"
+                        width={36}
+                        height={36}
+                      />
+                    ) : (
+                      <img
+                        src={PROFILE_DEFAULT_IMG}
+                        alt="프로필"
+                        width={36}
+                        height={36}
+                      />
+                    )}
+                  </PostProfile>
                   <PostAuthorName>{post.email}</PostAuthorName>
                   <PostDate>{post.updatedAt || post.createdAt}</PostDate>
                 </PostProfileBox>
@@ -252,7 +273,6 @@ const PostProfileBox = styled.div`
 const PostProfile = styled.div`
   width: 36px;
   height: 36px;
-  background-color: #f2f2f2;
   border-radius: 50%;
 `;
 
