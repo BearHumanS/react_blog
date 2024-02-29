@@ -26,4 +26,4 @@ export const useAdmin = () => {
   return isAdmin;
 };
 
-export const PROFILE_DEFAULT_IMG = '/src/assets/default_profile.svg';
+export const PROFILE_DEFAULT_IMG = '/public/default_profile.svg';
